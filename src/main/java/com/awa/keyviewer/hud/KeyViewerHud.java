@@ -213,10 +213,11 @@ public class KeyViewerHud implements HudElement {
 		int thickness = Math.max(1, (int) Math.round(Math.min(width, height) * 0.06D));
 		int radius = Math.round(clampF(config.cornerRadius, 0.0F, 1.0F) * Math.min(width, height) / 2.0F);
 
-		// 先画圆角边框，再往里缩一圈画圆角底色，就得到粗细均匀的圆角边框
-		fillRounded(graphics, x, y, width, height, radius, border);
+		// 底色只画在内圈，边框画成"环"。这样底色透明度调到 0 时中间是真正透空的，
+		// 不会被边框色填上（以前是先涂满边框色再盖底色，边框色会从中间透出来）。
 		fillRounded(graphics, x + thickness, y + thickness, width - thickness * 2, height - thickness * 2,
 				Math.max(0, radius - thickness), fill);
+		drawRoundedBorder(graphics, x, y, width, height, radius, thickness, border);
 
 		if (label != null) {
 			Font font = client.font;
@@ -232,7 +233,7 @@ public class KeyViewerHud implements HudElement {
 		}
 	}
 
-	/** 圆角矩形：圆角部分逐行填充，中间直边一次填完。 */
+	/** 圆角矩形，逐行填充（中间直边由 rowInset 返回 0，自然就是整行）。 */
 	private static void fillRounded(GuiGraphicsExtractor graphics, int x, int y, int width, int height,
 			int radius, int color) {
 		if (width <= 0 || height <= 0) {
@@ -246,19 +247,67 @@ public class KeyViewerHud implements HudElement {
 			return;
 		}
 
-		for (int row = 0; row < r; row++) {
-			int inset = cornerInset(r, r - row - 0.5D);
+		for (int row = 0; row < height; row++) {
+			int inset = rowInset(row, height, r);
 			graphics.fill(x + inset, y + row, x + width - inset, y + row + 1, color);
 		}
+	}
 
-		if (height - r > r) {
-			graphics.fill(x, y + r, x + width, y + height - r, color);
+	/** 圆角边框：只画环，中间留空，不会盖住底色。 */
+	private static void drawRoundedBorder(GuiGraphicsExtractor graphics, int x, int y, int width, int height,
+			int radius, int thickness, int color) {
+		if (width <= 0 || height <= 0 || thickness <= 0) {
+			return;
 		}
 
-		for (int row = height - r; row < height; row++) {
-			int inset = cornerInset(r, row - (height - r) + 0.5D);
-			graphics.fill(x + inset, y + row, x + width - inset, y + row + 1, color);
+		int r = Math.min(radius, Math.min(width, height) / 2);
+		int innerWidth = width - thickness * 2;
+		int innerHeight = height - thickness * 2;
+		int innerRadius = Math.max(0, r - thickness);
+
+		for (int row = 0; row < height; row++) {
+			int top = y + row;
+			int outerInset = rowInset(row, height, r);
+			int outerLeft = x + outerInset;
+			int outerRight = x + width - outerInset;
+
+			// 上下两条边、以及内圈太小的情况：整行都是边框
+			if (innerWidth <= 0 || innerHeight <= 0 || row < thickness || row >= height - thickness) {
+				graphics.fill(outerLeft, top, outerRight, top + 1, color);
+				continue;
+			}
+
+			int innerInset = rowInset(row - thickness, innerHeight, innerRadius);
+			int innerLeft = x + thickness + innerInset;
+			int innerRight = x + width - thickness - innerInset;
+
+			if (innerLeft > outerLeft) {
+				graphics.fill(outerLeft, top, innerLeft, top + 1, color);
+			}
+
+			if (outerRight > innerRight) {
+				graphics.fill(innerRight, top, outerRight, top + 1, color);
+			}
 		}
+	}
+
+	/** 某一行在圆角矩形里的左右内缩量。 */
+	private static int rowInset(int row, int height, int radius) {
+		int r = Math.min(radius, height / 2);
+
+		if (r <= 0) {
+			return 0;
+		}
+
+		if (row < r) {
+			return cornerInset(r, r - row - 0.5D);
+		}
+
+		if (row >= height - r) {
+			return cornerInset(r, row - (height - r) + 0.5D);
+		}
+
+		return 0;
 	}
 
 	private static int cornerInset(int radius, double distanceFromCenter) {

@@ -15,7 +15,7 @@ It shows the keys you are holding while you play — WASD, left/right mouse butt
 ## Usage
 
 1. Install **Fabric Loader 0.19.5+** for Minecraft 26.3
-2. Put `Keyviewer_awa-1.2.jar` and `fabric-api-0.161.0+26.3.jar` into `.minecraft/mods/`
+2. Put `Keyviewer_awa-fabric-26.3-1.3.jar` and `fabric-api-0.161.0+26.3.jar` into `.minecraft/mods/`
 3. Launch the game and join a world — the HUD shows up in the lower-left corner
 
 ### Settings
@@ -33,6 +33,8 @@ Type this in chat to open the settings screen (with live preview):
 | Opacity | text, pressed, released, border |
 | Shape | corner radius (0% = sharp corners, 100% = squares become circles, space bar becomes a capsule) |
 | Layout | position X, position Y, size, sensitivity |
+
+> Tip: any opacity set to 0 is fully see-through. Set *released* opacity to 0 and the idle keys disappear completely — you only see the game, and keys light up while pressed.
 
 Everything is saved to `.minecraft/config/keyviewer_awa.json` automatically.
 
