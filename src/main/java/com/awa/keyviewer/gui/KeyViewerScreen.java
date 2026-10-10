@@ -53,9 +53,7 @@ public class KeyViewerScreen extends Screen {
 		cell = colorCell(cell, left, top, ColorTarget.PRESSED);
 		cell = colorCell(cell, left, top, ColorTarget.RELEASED);
 
-		// 透明度 / 位置 / 大小 / 灵敏度
-		cell = sliderCell(cell, left, top, "opacity", 0.0F, 1.0F, true,
-				() -> config.opacity, value -> config.opacity = value);
+		// 透明度 / 圆角 / 位置 / 大小 / 灵敏度
 		cell = sliderCell(cell, left, top, "textOpacity", 0.0F, 1.0F, true,
 				() -> config.textOpacity, value -> config.textOpacity = value);
 		cell = sliderCell(cell, left, top, "pressedOpacity", 0.0F, 1.0F, true,
@@ -64,6 +62,8 @@ public class KeyViewerScreen extends Screen {
 				() -> config.releasedOpacity, value -> config.releasedOpacity = value);
 		cell = sliderCell(cell, left, top, "borderOpacity", 0.0F, 1.0F, true,
 				() -> config.borderOpacity, value -> config.borderOpacity = value);
+		cell = sliderCell(cell, left, top, "cornerRadius", 0.0F, 1.0F, true,
+				() -> config.cornerRadius, value -> config.cornerRadius = value);
 		cell = sliderCell(cell, left, top, "posX", 0.0F, 1.0F, true,
 				() -> config.posX, value -> config.posX = value);
 		cell = sliderCell(cell, left, top, "posY", 0.0F, 1.0F, true,

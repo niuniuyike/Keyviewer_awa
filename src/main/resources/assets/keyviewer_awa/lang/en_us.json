@@ -18,7 +18,6 @@
 	"keyviewer_awa.option.borderColor": "Border",
 	"keyviewer_awa.option.pressedColor": "Pressed",
 	"keyviewer_awa.option.releasedColor": "Released",
-	"keyviewer_awa.option.opacity": "Opacity",
 	"keyviewer_awa.option.textOpacity": "Text opacity",
 	"keyviewer_awa.option.pressedOpacity": "Pressed opacity",
 	"keyviewer_awa.option.releasedOpacity": "Released opacity",
@@ -26,5 +25,6 @@
 	"keyviewer_awa.option.posX": "Position X",
 	"keyviewer_awa.option.posY": "Position Y",
 	"keyviewer_awa.option.size": "Size",
+	"keyviewer_awa.option.cornerRadius": "Corner radius",
 	"keyviewer_awa.option.sensitivity": "Sensitivity"
 }

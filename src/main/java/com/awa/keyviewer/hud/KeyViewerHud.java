@@ -206,19 +206,17 @@ public class KeyViewerHud implements HudElement {
 	private static void box(GuiGraphicsExtractor graphics, Minecraft client, KeyViewerConfig config,
 			int x, int y, int width, int height, String label, KeyId id, boolean pressed, float animationDelta) {
 		float lit = animatePress(id, pressed, animationDelta);
-		float opacity = clampF(config.opacity, 0.0F, 1.0F);
-		int releasedFill = applyOpacity(config.releasedColor, opacity * clampF(config.releasedOpacity, 0.0F, 1.0F));
-		int pressedFill = applyOpacity(config.pressedColor, opacity * clampF(config.pressedOpacity, 0.0F, 1.0F));
+		int releasedFill = applyOpacity(config.releasedColor, clampF(config.releasedOpacity, 0.0F, 1.0F));
+		int pressedFill = applyOpacity(config.pressedColor, clampF(config.pressedOpacity, 0.0F, 1.0F));
 		int fill = lerpColor(releasedFill, pressedFill, lit);
-		int border = applyOpacity(config.borderColor, opacity * clampF(config.borderOpacity, 0.0F, 1.0F));
+		int border = applyOpacity(config.borderColor, clampF(config.borderOpacity, 0.0F, 1.0F));
 		int thickness = Math.max(1, (int) Math.round(Math.min(width, height) * 0.06D));
+		int radius = Math.round(clampF(config.cornerRadius, 0.0F, 1.0F) * Math.min(width, height) / 2.0F);
 
-		graphics.fill(x, y, x + width, y + height, fill);
-		// 细边框：上下左右各一条 1~2 像素的线
-		graphics.fill(x, y, x + width, y + thickness, border);
-		graphics.fill(x, y + height - thickness, x + width, y + height, border);
-		graphics.fill(x, y + thickness, x + thickness, y + height - thickness, border);
-		graphics.fill(x + width - thickness, y + thickness, x + width, y + height - thickness, border);
+		// 先画圆角边框，再往里缩一圈画圆角底色，就得到粗细均匀的圆角边框
+		fillRounded(graphics, x, y, width, height, radius, border);
+		fillRounded(graphics, x + thickness, y + thickness, width - thickness * 2, height - thickness * 2,
+				Math.max(0, radius - thickness), fill);
 
 		if (label != null) {
 			Font font = client.font;
@@ -232,6 +230,47 @@ public class KeyViewerHud implements HudElement {
 			graphics.centeredText(font, label, 0, -font.lineHeight / 2 + 1, textColor);
 			graphics.pose().popMatrix();
 		}
+	}
+
+	/** 圆角矩形：圆角部分逐行填充，中间直边一次填完。 */
+	private static void fillRounded(GuiGraphicsExtractor graphics, int x, int y, int width, int height,
+			int radius, int color) {
+		if (width <= 0 || height <= 0) {
+			return;
+		}
+
+		int r = Math.min(radius, Math.min(width, height) / 2);
+
+		if (r <= 0) {
+			graphics.fill(x, y, x + width, y + height, color);
+			return;
+		}
+
+		for (int row = 0; row < r; row++) {
+			int inset = cornerInset(r, r - row - 0.5D);
+			graphics.fill(x + inset, y + row, x + width - inset, y + row + 1, color);
+		}
+
+		if (height - r > r) {
+			graphics.fill(x, y + r, x + width, y + height - r, color);
+		}
+
+		for (int row = height - r; row < height; row++) {
+			int inset = cornerInset(r, row - (height - r) + 0.5D);
+			graphics.fill(x + inset, y + row, x + width - inset, y + row + 1, color);
+		}
+	}
+
+	private static int cornerInset(int radius, double distanceFromCenter) {
+		if (distanceFromCenter <= 0.0D) {
+			return 0;
+		}
+
+		if (distanceFromCenter >= radius) {
+			return radius;
+		}
+
+		return (int) Math.round(radius - Math.sqrt((double) radius * radius - distanceFromCenter * distanceFromCenter));
 	}
 
 	/** 按下 / 松开的渐入渐出：返回 0（暗）~1（亮）。 */

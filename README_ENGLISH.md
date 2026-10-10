@@ -15,7 +15,7 @@ It shows the keys you are holding while you play — WASD, left/right mouse butt
 ## Usage
 
 1. Install **Fabric Loader 0.19.5+** for Minecraft 26.3
-2. Put `Keyviewer_awa-1.1.jar` and `fabric-api-0.161.0+26.3.jar` into `.minecraft/mods/`
+2. Put `Keyviewer_awa-1.2.jar` and `fabric-api-0.161.0+26.3.jar` into `.minecraft/mods/`
 3. Launch the game and join a world — the HUD shows up in the lower-left corner
 
 ### Settings
@@ -30,7 +30,8 @@ Type this in chat to open the settings screen (with live preview):
 | --- | --- |
 | Toggles | WASD keys, L/R mouse buttons, space bar, follow mouse |
 | Colors | border / pressed / released (RGB sliders + hex code) |
-| Opacity | overall, text, pressed, released, border |
+| Opacity | text, pressed, released, border |
+| Shape | corner radius (0% = sharp corners, 100% = squares become circles, space bar becomes a capsule) |
 | Layout | position X, position Y, size, sensitivity |
 
 Everything is saved to `.minecraft/config/keyviewer_awa.json` automatically.

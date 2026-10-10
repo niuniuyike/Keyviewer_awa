@@ -16,7 +16,6 @@ public class KeyViewerConfig {
 	public static final int DEF_BORDER_COLOR = 0xFFFFFFFF;
 	public static final int DEF_PRESSED_COLOR = 0xFFF2F2F2;
 	public static final int DEF_RELEASED_COLOR = 0xC0181818;
-	public static final float DEF_OPACITY = 1.0F;
 	public static final float DEF_TEXT_OPACITY = 1.0F;
 	public static final float DEF_PRESSED_OPACITY = 1.0F;
 	public static final float DEF_RELEASED_OPACITY = 1.0F;
@@ -24,6 +23,7 @@ public class KeyViewerConfig {
 	public static final float DEF_POS_X = 0.04F;
 	public static final float DEF_POS_Y = 0.70F;
 	public static final float DEF_SIZE = 1.0F;
+	public static final float DEF_CORNER_RADIUS = 0.0F;
 	public static final float DEF_SENSITIVITY = 1.0F;
 
 	// 显示开关
@@ -39,7 +39,6 @@ public class KeyViewerConfig {
 	public int releasedColor = DEF_RELEASED_COLOR;
 
 	// 透明度
-	public float opacity = DEF_OPACITY;
 	public float textOpacity = DEF_TEXT_OPACITY;
 	/** 键位亮起（按下）时的透明度。 */
 	public float pressedOpacity = DEF_PRESSED_OPACITY;
@@ -54,6 +53,9 @@ public class KeyViewerConfig {
 
 	// 大小（缩放倍率）
 	public float size = DEF_SIZE;
+
+	/** 圆角程度：0 = 直角，1 = 完全圆角（方块变圆、空格变胶囊）。 */
+	public float cornerRadius = DEF_CORNER_RADIUS;
 
 	// 灵敏度（鼠标速度 -> HUD 位移）
 	public float sensitivity = DEF_SENSITIVITY;
@@ -104,7 +106,6 @@ public class KeyViewerConfig {
 		borderColor = DEF_BORDER_COLOR;
 		pressedColor = DEF_PRESSED_COLOR;
 		releasedColor = DEF_RELEASED_COLOR;
-		opacity = DEF_OPACITY;
 		textOpacity = DEF_TEXT_OPACITY;
 		pressedOpacity = DEF_PRESSED_OPACITY;
 		releasedOpacity = DEF_RELEASED_OPACITY;
@@ -112,11 +113,11 @@ public class KeyViewerConfig {
 		posX = DEF_POS_X;
 		posY = DEF_POS_Y;
 		size = DEF_SIZE;
+		cornerRadius = DEF_CORNER_RADIUS;
 		sensitivity = DEF_SENSITIVITY;
 	}
 
 	private void sanitize() {
-		opacity = clamp(opacity, 0.0F, 1.0F);
 		textOpacity = clamp(textOpacity, 0.0F, 1.0F);
 		pressedOpacity = clamp(pressedOpacity, 0.0F, 1.0F);
 		releasedOpacity = clamp(releasedOpacity, 0.0F, 1.0F);
@@ -124,6 +125,7 @@ public class KeyViewerConfig {
 		posX = clamp(posX, 0.0F, 1.0F);
 		posY = clamp(posY, 0.0F, 1.0F);
 		size = clamp(size, 0.5F, 3.0F);
+		cornerRadius = clamp(cornerRadius, 0.0F, 1.0F);
 		sensitivity = clamp(sensitivity, 0.0F, 2.0F);
 	}
 

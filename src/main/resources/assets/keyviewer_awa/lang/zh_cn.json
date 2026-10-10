@@ -18,7 +18,6 @@
 	"keyviewer_awa.option.borderColor": "边框颜色",
 	"keyviewer_awa.option.pressedColor": "按下颜色",
 	"keyviewer_awa.option.releasedColor": "松开颜色",
-	"keyviewer_awa.option.opacity": "透明度",
 	"keyviewer_awa.option.textOpacity": "文字透明度",
 	"keyviewer_awa.option.pressedOpacity": "按下时透明度",
 	"keyviewer_awa.option.releasedOpacity": "松开时透明度",
@@ -26,5 +25,6 @@
 	"keyviewer_awa.option.posX": "位置 X",
 	"keyviewer_awa.option.posY": "位置 Y",
 	"keyviewer_awa.option.size": "大小",
+	"keyviewer_awa.option.cornerRadius": "圆角",
 	"keyviewer_awa.option.sensitivity": "灵敏度"
 }
